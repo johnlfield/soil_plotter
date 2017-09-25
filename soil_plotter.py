@@ -1,6 +1,6 @@
 #!/bin/python
 
-""" Routine plot a distribution of soil on a soil texture triangle, with custom point sizing and coloring.  Textures
+""" Routine to plot a distribution of soil on a soil texture triangle, with custom point sizing and coloring.  Textures
 must be defined as tuples of (sand fraction, silt fraction, clay fraction).
 """
 
