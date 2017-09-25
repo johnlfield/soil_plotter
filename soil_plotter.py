@@ -25,7 +25,7 @@ def color_scale(high_color_rgb, low_color_rgb, scalar, scalar_range):
     """ Define a color between high_color_rgb and low_color_rgb corresponding to where the scalar value sits withing
     the scalar_range
     """
-    span = (scalar-scalar_range[0]) / (scalar_range[1]-scalar_range[0])
+    span = min((scalar-scalar_range[0]) / (scalar_range[1]-scalar_range[0]), 1.0)
     red = low_color_rgb[0] + span * (high_color_rgb[0]-low_color_rgb[0])
     green = low_color_rgb[1] + span * (high_color_rgb[1]-low_color_rgb[1])
     blue = low_color_rgb[2] + span * (high_color_rgb[2]-low_color_rgb[2])
@@ -174,12 +174,15 @@ def plot_usda_classes(font_size=10, color='k', zorder=2):
         plt.text(x, y, key, color=color, ha='center', va='center', fontsize=font_size, zorder=zorder)
 
 
-def soil_plotter(textures, sizes, color_scalars, zorder=1):
+def soil_plotter(textures, sizes, color_scalars, custom_scalar_range='', zorder=1):
     """ Plot each soil in 'textures' with a filled circular marker of point size defined in 'sizes' and RGB color
     defined in 'color_scalars'
     """
     print 'Creating soil texture triangle point cloud...'
-    color_scalar_range = (min(color_scalars), max(color_scalars))
+    if custom_scalar_range:
+        color_scalar_range = custom_scalar_range
+    else:
+        color_scalar_range = (min(color_scalars), max(color_scalars))
 
     for e, texture in enumerate(textures):
         x, y = transpose(texture)

@@ -61,7 +61,6 @@ def soils_analysis(landscape_fpath, sand_column, silt_column, clay_column, size_
     # upload soil data to database
     db_fpath = 'soils.db'
     list_to_sql(soil_data, db_fpath, 'soils')
-    print
 
     # extract list of unique soils, and associated total size and average color data values
     print "Determining total point size and associated area-weighted color for each unique soil in the dataset..."
@@ -70,8 +69,6 @@ def soils_analysis(landscape_fpath, sand_column, silt_column, clay_column, size_
         cur = con.cursor()
         cur.execute("SELECT id, SUM(area), AVG(color_values) FROM soils GROUP BY id")
         processed_data = cur.fetchall()
-
-    print 'Creating soil texture triangle point cloud...'
 
     # sort by size (so smallest points can be printed on top of larger ones) and extract soil texture data
     processed_data.sort(key=itemgetter(1), reverse=True)
@@ -96,7 +93,7 @@ def soils_analysis(landscape_fpath, sand_column, silt_column, clay_column, size_
     soil_plotter.plot_triangle_grid()
     soil_plotter.plot_simple_classes()
     # soil_plotter.plot_usda_classes()
-    soil_plotter.soil_plotter(textures, areas, color_scalars)
+    soil_plotter.soil_plotter(textures, areas, color_scalars, custom_scalar_range=(0, 60))
 
     # create legend
     custom_scale = [0.0, 15.0, 30.0, 45.0, 60.0]
@@ -111,9 +108,8 @@ def soils_analysis(landscape_fpath, sand_column, silt_column, clay_column, size_
     plt.savefig(figure_name)
     plt.close()
     print
-    print
 
 
-soils_analysis('polygon_attributes.csv', 'sand', 'silt', 'clay', 'hectares', 'distance', 'test2.png',
+soils_analysis('landscape_iii.csv', 'sand', 'silt', 'clay', 'area_ha_', 'n_opt', 'landscape_iii.png',
                title="205 USD (Mg $\mathregular{CO_{2}}$eq$\mathregular{)^{-1}}$",
                legend_title="Optimal fertilizer\napplication rate\n(kg N $\mathregular{ha^{-1}}$)")
